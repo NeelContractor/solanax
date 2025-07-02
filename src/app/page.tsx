@@ -1,5 +1,5 @@
-import { DashboardFeature } from '@/components/dashboard/dashboard-feature'
+import SocialMedia from '@/components/SocialMediaComponents/SocialMedia'
 
 export default function Home() {
-  return <DashboardFeature />
+  return <SocialMedia />
 }
