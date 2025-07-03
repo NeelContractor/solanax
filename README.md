@@ -1,88 +1,64 @@
-# solana-mini-x
+# 🧬 Solanax — A Social Media Platform on Solana
 
-This is a Next.js app containing:
+Solanax is a decentralized social media platform built on the [Solana](https://solana.com) blockchain.  
+It enables users to interact—like, post, comment—without signing a transaction every single time.
 
-- Tailwind CSS setup for styling
-- Useful wallet UI elements setup using [@solana/web3.js](https://www.npmjs.com/package/@solana/web3.js)
-- A basic Counter Solana program written in Anchor
-- UI components for interacting with the Counter program
+## 🌟 Features
 
-## Getting Started
+- ✅ On-chain user profiles
+- 🔐 Session keypairs to avoid wallet spam signing
+- 🖼️ Post, like, and comment functionality
+- 💸 Temporary funding for session accounts (refundable)
+- ⚡️ Fast and cheap interaction via backend-relayed transactions
+---
 
-### Installation
+## 🛠️ How It Works
 
-#### Download the template
+### 1. Create Profile
+Users first initialize their profile on-chain by signing a transaction. This stores basic metadata and establishes identity.
 
-```shell
-pnpm create solana-dapp@latest -t gh:solana-developers/solana-templates/legacy/solana-mini-x
-```
+### 2. Create a Session Keypair
+A temporary keypair (session account) is generated for the user.  
+This keypair can:
 
-#### Install Dependencies
+- Sign interactions (posts, likes, comments) off-chain
+- Be authorized on-chain for a fixed duration
+- Be funded with a small amount of SOL to cover relayed tx fees
 
-```shell
-pnpm install
-```
+### 3. Interact Freely
+The session key signs all user actions. These signed messages are:
 
-## Apps
+- Stored temporarily in a backend database
+- Batched and submitted by a relayer to the Solana network
 
-### anchor
+This pattern improves UX by avoiding wallet prompts for every interaction.
 
-This is a Solana program written in Rust using the Anchor framework.
+### 4. Refund Session Funds
+Users can reclaim the SOL from their session accounts if unused or expired.
 
-#### Commands
+---
 
-You can use any normal anchor commands. Either move to the `anchor` directory and run the `anchor` command or prefix the
-command with `pnpm`, eg: `pnpm anchor`.
+## 🧪 Tech Stack
 
-#### Sync the program id:
+- **Frontend**: Next.js + Tailwind + Wallet Adapter
+- **Blockchain**: Solana + Anchor framework
+- **Session Relayer**: Signs and batches user actions
 
-Running this command will create a new keypair in the `anchor/target/deploy` directory and save the address to the
-Anchor config file and update the `declare_id!` macro in the `./src/lib.rs` file of the program.
+---
 
-You will manually need to update the constant in `anchor/lib/counter-exports.ts` to match the new program id.
+## 🚀 Getting Started
 
-```shell
-pnpm anchor keys sync
-```
+### Prerequisites
 
-#### Build the program:
+- Node.js or Bun
+- Solana CLI
+- Anchor CLI
+- Phantom or Backpack Wallet
 
-```shell
-pnpm anchor-build
-```
+### Install Dependencies
 
-#### Start the test validator with the program deployed:
-
-```shell
-pnpm anchor-localnet
-```
-
-#### Run the tests
-
-```shell
-pnpm anchor-test
-```
-
-#### Deploy to Devnet
-
-```shell
-pnpm anchor deploy --provider.cluster devnet
-```
-
-### web
-
-This is a React app that uses the Anchor generated client to interact with the Solana program.
-
-#### Commands
-
-Start the web app
-
-```shell
-pnpm dev
-```
-
-Build the web app
-
-```shell
-pnpm build
+```bash
+    git clone repo
+    cd solanax
+    npm install     # or bun install
 ```
