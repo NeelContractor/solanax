@@ -1,6 +1,6 @@
-# 🧬 Solanax — A Social Media Platform on Solana
+# 🧬 SolanaX — A Social Media Platform on Solana
 
-Solanax is a decentralized social media platform built on the [Solana](https://solana.com) blockchain.  
+Solanax is a decentralized social media platform built on the Solana blockchain.  
 It enables users to interact—like, post, comment—without signing a transaction every single time.
 
 ## 🌟 Features
