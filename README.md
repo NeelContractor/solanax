@@ -60,5 +60,5 @@ Users can reclaim the SOL from their session accounts if unused or expired.
 ```bash
     git clone https://github.com/NeelContractor/solanax
     cd solanax
-    npm install     # or bun install
+    npm install 
 ```
