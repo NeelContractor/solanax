@@ -1,7 +1,7 @@
 import * as anchor from '@coral-xyz/anchor'
 import { Program } from '@coral-xyz/anchor'
 import { Keypair, PublicKey, SystemProgram } from '@solana/web3.js'
-import { Social } from '../target/types/social'
+import { Socialx } from '../target/types/socialx'
 
 describe('social', () => {
   // Configure the client to use the local cluster.
@@ -9,7 +9,7 @@ describe('social', () => {
   anchor.setProvider(provider)
   const authority = provider.wallet as anchor.Wallet
 
-  const program = anchor.workspace.Social as Program<Social>
+  const program = anchor.workspace.Socialx as Program<Socialx>
   console.log("program: ", program.programId);
 
   let userAccount: PublicKey;

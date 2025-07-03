@@ -2,12 +2,12 @@
  * Program IDL in camelCase format in order to be used in JS/TS.
  *
  * Note that this is only a type helper and is not the actual IDL. The original
- * IDL can be found at `target/idl/social.json`.
+ * IDL can be found at `target/idl/socialx.json`.
  */
-export type Social = {
-  "address": "Cv45ivRCLup4BZmQhB95dC3Jc5xLPaPPxARhmQ15njVD",
+export type Socialx = {
+  "address": "FnoMb6aW5Nx4suGE1fTRoMEEBzfkcHdyNyo1CYjfLpEX",
   "metadata": {
-    "name": "social",
+    "name": "socialx",
     "version": "0.1.0",
     "spec": "0.1.0",
     "description": "Created with Anchor"
@@ -27,9 +27,37 @@ export type Social = {
       ],
       "accounts": [
         {
-          "name": "authority",
+          "name": "sessionKeypair",
           "writable": true,
           "signer": true
+        },
+        {
+          "name": "session",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "session.authority",
+                "account": "session"
+              },
+              {
+                "kind": "account",
+                "path": "sessionKeypair"
+              }
+            ]
+          }
         },
         {
           "name": "systemProgram",
@@ -120,9 +148,37 @@ export type Social = {
       ],
       "accounts": [
         {
-          "name": "authority",
+          "name": "sessionKeypair",
           "writable": true,
           "signer": true
+        },
+        {
+          "name": "session",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "session.authority",
+                "account": "session"
+              },
+              {
+                "kind": "account",
+                "path": "sessionKeypair"
+              }
+            ]
+          }
         },
         {
           "name": "post",
@@ -183,9 +239,37 @@ export type Social = {
       ],
       "accounts": [
         {
-          "name": "authority",
+          "name": "sessionKeypair",
           "writable": true,
           "signer": true
+        },
+        {
+          "name": "session",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "session.authority",
+                "account": "session"
+              },
+              {
+                "kind": "account",
+                "path": "sessionKeypair"
+              }
+            ]
+          }
         },
         {
           "name": "userAccount",
@@ -203,7 +287,8 @@ export type Social = {
               },
               {
                 "kind": "account",
-                "path": "authority"
+                "path": "session.authority",
+                "account": "session"
               }
             ]
           }
@@ -224,7 +309,8 @@ export type Social = {
               },
               {
                 "kind": "account",
-                "path": "authority"
+                "path": "session.authority",
+                "account": "session"
               },
               {
                 "kind": "account",
@@ -442,9 +528,37 @@ export type Social = {
       ],
       "accounts": [
         {
-          "name": "authority",
+          "name": "sessionKeypair",
           "writable": true,
           "signer": true
+        },
+        {
+          "name": "session",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "session.authority",
+                "account": "session"
+              },
+              {
+                "kind": "account",
+                "path": "sessionKeypair"
+              }
+            ]
+          }
         },
         {
           "name": "post",
@@ -466,7 +580,8 @@ export type Social = {
               },
               {
                 "kind": "account",
-                "path": "authority"
+                "path": "session.authority",
+                "account": "session"
               },
               {
                 "kind": "account",

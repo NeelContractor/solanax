@@ -2,12 +2,12 @@
 #![allow(unexpected_cfgs)]
 
 use anchor_lang::prelude::*;
+use anchor_lang::solana_program::{program::invoke, system_instruction::transfer};
 
-declare_id!("Cv45ivRCLup4BZmQhB95dC3Jc5xLPaPPxARhmQ15njVD");
+declare_id!("FnoMb6aW5Nx4suGE1fTRoMEEBzfkcHdyNyo1CYjfLpEX");
 
 #[program]
-pub mod social {
-    use anchor_lang::solana_program::{program::invoke, system_instruction::transfer};
+pub mod socialx {
 
     use super::*;
 
@@ -30,10 +30,14 @@ pub mod social {
     }
 
     pub fn create_post(ctx: Context<CreatePost>, content: String) -> Result<()> {
+        let session = &ctx.accounts.session;
+
+        require!(session.is_active, SocialMediaError::SessionNotActive);
+
         let post = &mut ctx.accounts.post;
         let user_account = &mut ctx.accounts.user_account;
 
-        post.authority = ctx.accounts.authority.key();
+        post.authority = session.authority;
         post.content = content;
         post.likes = 0;
         post.comment_count = 0;
@@ -46,10 +50,14 @@ pub mod social {
     }
 
     pub fn like_post(ctx: Context<LikePost>) -> Result<()> {
+        let session = &ctx.accounts.session;
+
+        require!(session.is_active, SocialMediaError::SessionNotActive);
+
         let like = &mut ctx.accounts.like;
         let post = &mut ctx.accounts.post;
 
-        like.authority = ctx.accounts.authority.key();
+        like.authority = session.authority;
         like.post = post.key();
         like.created_at = Clock::get()?.unix_timestamp;
 
@@ -58,10 +66,14 @@ pub mod social {
     }
 
     pub fn create_comment(ctx: Context<CreateComment>, content: String) -> Result<()> {
+        let session= &ctx.accounts.session;
+
+        require!(session.is_active, SocialMediaError::SessionNotActive);
+
         let comment = &mut ctx.accounts.comment;
         let post = &mut ctx.accounts.post;
 
-        comment.authority = ctx.accounts.authority.key();
+        comment.authority = session.authority;
         comment.post = post.key();
         comment.content = content;
         comment.created_at = Clock::get()?.unix_timestamp;
@@ -90,7 +102,7 @@ pub mod social {
                     let like_account_info = &ctx.remaining_accounts[account_index];
                     let mut like = Account::<Like>::try_from(like_account_info)?;
     
-                    like.authority = ctx.accounts.authority.key();
+                    like.authority = ctx.accounts.session.authority; //ctx.accounts.authority.key();
                     like.post = post_key;
                     like.created_at = Clock::get()?.unix_timestamp;
     
@@ -111,7 +123,7 @@ pub mod social {
                     let comment_account_info = &ctx.remaining_accounts[account_index];
                     let mut comment = Account::<Comment>::try_from(comment_account_info)?;
     
-                    comment.authority = ctx.accounts.authority.key();
+                    comment.authority = ctx.accounts.session.authority; //ctx.accounts.authority.key();
                     comment.post = post_key;
                     comment.content = content;
                     comment.created_at = Clock::get()?.unix_timestamp;
@@ -190,21 +202,30 @@ pub struct InitializeUser<'info> {
 
 #[derive(Accounts)]
 pub struct CreatePost<'info> {
+    // #[account(mut)]
+    // pub authority: Signer<'info>,
     #[account(mut)]
-    pub authority: Signer<'info>,
+    pub session_keypair: Signer<'info>,
+
+    #[account(
+        seeds = [b"session", session.authority.as_ref(), session_keypair.key().as_ref()],
+        bump,
+        constraint = session.session_key == session_keypair.key() @ SocialMediaError::InvalidSession
+    )]
+    pub session: Account<'info, Session>,
 
     #[account(
         mut,
-        seeds = [b"user", authority.key().as_ref()],
+        seeds = [b"user", session.authority.key().as_ref()],
         bump = user_account.bump
     )]
     pub user_account: Account<'info, UserAccount>,
 
     #[account(
         init,
-        payer = authority,
+        payer = session_keypair,
         space = 8 + Post::INIT_SPACE,
-        seeds = [b"post", authority.key().as_ref(), &user_account.post_count.to_le_bytes()],
+        seeds = [b"post", session.authority.key().as_ref(), &user_account.post_count.to_le_bytes()],
         bump
     )]
     pub post: Account<'info, Post>,
@@ -214,15 +235,23 @@ pub struct CreatePost<'info> {
 
 #[derive(Accounts)]
 pub struct LikePost<'info> {
+    // #[account(mut)]
+    // pub authority: Signer<'info>,
     #[account(mut)]
-    pub authority: Signer<'info>,
+    pub session_keypair: Signer<'info>,
+    #[account(
+        seeds = [b"session", session.authority.as_ref(), session_keypair.key().as_ref()],
+        bump,
+        constraint = session.session_key == session_keypair.key() @ SocialMediaError::InvalidSession
+    )]
+    pub session: Account<'info, Session>,
     #[account(mut)]
     pub post: Account<'info, Post>,
     #[account(
         init,
-        payer = authority,
+        payer = session_keypair,
         space = 8 + Like::INIT_SPACE,
-        seeds = [b"like", authority.key().as_ref(), post.key().as_ref()],
+        seeds = [b"like", session.authority.key().as_ref(), post.key().as_ref()],
         bump
     )]
     pub like: Account<'info, Like>,
@@ -231,13 +260,21 @@ pub struct LikePost<'info> {
 
 #[derive(Accounts)]
 pub struct CreateComment<'info> {
+    // #[account(mut)]
+    // pub authority: Signer<'info>,
     #[account(mut)]
-    pub authority: Signer<'info>,
+    pub session_keypair: Signer<'info>,
+    #[account(
+        seeds = [b"session", session.authority.as_ref(), session_keypair.key().as_ref()],
+        bump,
+        constraint = session.session_key == session_keypair.key() @ SocialMediaError::InvalidSession
+    )]
+    pub session: Account<'info, Session>,
     #[account(mut)]
     pub post: Account<'info, Post>,
     #[account(
         init,
-        payer = authority,
+        payer = session_keypair,
         space = 8 + Comment::INIT_SPACE,
         seeds = [b"comment", post.key().as_ref(), &post.comment_count.to_le_bytes()],
         bump
@@ -248,8 +285,16 @@ pub struct CreateComment<'info> {
 
 #[derive(Accounts)]
 pub struct BatchActions<'info> {
+    // #[account(mut)]
+    // pub authority: Signer<'info>,
     #[account(mut)]
-    pub authority: Signer<'info>,
+    pub session_keypair: Signer<'info>,
+    #[account(
+        seeds = [b"session", session.authority.as_ref(), session_keypair.key().as_ref()],
+        bump,
+        constraint = session.session_key == session_keypair.key() @ SocialMediaError::InvalidSession
+    )]
+    pub session: Account<'info, Session>,
     pub system_program: Program<'info, System>,
 }
 

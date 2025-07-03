@@ -1,7 +1,7 @@
 {
-  "address": "Cv45ivRCLup4BZmQhB95dC3Jc5xLPaPPxARhmQ15njVD",
+  "address": "FnoMb6aW5Nx4suGE1fTRoMEEBzfkcHdyNyo1CYjfLpEX",
   "metadata": {
-    "name": "social",
+    "name": "socialx",
     "version": "0.1.0",
     "spec": "0.1.0",
     "description": "Created with Anchor"
@@ -21,9 +21,37 @@
       ],
       "accounts": [
         {
-          "name": "authority",
+          "name": "session_keypair",
           "writable": true,
           "signer": true
+        },
+        {
+          "name": "session",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "session.authority",
+                "account": "Session"
+              },
+              {
+                "kind": "account",
+                "path": "session_keypair"
+              }
+            ]
+          }
         },
         {
           "name": "system_program",
@@ -114,9 +142,37 @@
       ],
       "accounts": [
         {
-          "name": "authority",
+          "name": "session_keypair",
           "writable": true,
           "signer": true
+        },
+        {
+          "name": "session",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "session.authority",
+                "account": "Session"
+              },
+              {
+                "kind": "account",
+                "path": "session_keypair"
+              }
+            ]
+          }
         },
         {
           "name": "post",
@@ -177,9 +233,37 @@
       ],
       "accounts": [
         {
-          "name": "authority",
+          "name": "session_keypair",
           "writable": true,
           "signer": true
+        },
+        {
+          "name": "session",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "session.authority",
+                "account": "Session"
+              },
+              {
+                "kind": "account",
+                "path": "session_keypair"
+              }
+            ]
+          }
         },
         {
           "name": "user_account",
@@ -197,7 +281,8 @@
               },
               {
                 "kind": "account",
-                "path": "authority"
+                "path": "session.authority",
+                "account": "Session"
               }
             ]
           }
@@ -218,7 +303,8 @@
               },
               {
                 "kind": "account",
-                "path": "authority"
+                "path": "session.authority",
+                "account": "Session"
               },
               {
                 "kind": "account",
@@ -436,9 +522,37 @@
       ],
       "accounts": [
         {
-          "name": "authority",
+          "name": "session_keypair",
           "writable": true,
           "signer": true
+        },
+        {
+          "name": "session",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  115,
+                  115,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "session.authority",
+                "account": "Session"
+              },
+              {
+                "kind": "account",
+                "path": "session_keypair"
+              }
+            ]
+          }
         },
         {
           "name": "post",
@@ -460,7 +574,8 @@
               },
               {
                 "kind": "account",
-                "path": "authority"
+                "path": "session.authority",
+                "account": "Session"
               },
               {
                 "kind": "account",
